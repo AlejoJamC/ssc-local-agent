@@ -56,21 +56,28 @@ class IngestionService(
     }
 
     fun queryRAGKnowledge(query: String): ResponseEntity<String> {
-        val similarDocuments = vectorStore.similaritySearch(query)
-        val information = similarDocuments?.joinToString(System.lineSeparator()) { it.getFormattedContent() }
+        val information = vectorStore.similaritySearch(query)
+            ?.joinToString(System.lineSeparator()) { it.getFormattedContent() }
+            .orEmpty()
+
         val systemPromptTemplate = SystemPromptTemplate(
             """
-            You are a helpful assistant.
-            Use only the following information to answer the question.
-            Do not use any other information. If you do not know, simply answer: IDK :(
+        You are a helpful assistant.
+        Use only the following information to answer the question.
+        Do not use any other information. If you do not know, simply answer: IDK :(
 
-            {information}
-            """.trimIndent()
+        {information}
+        """.trimIndent()
         )
+
         val systemMessage = systemPromptTemplate.createMessage(mapOf("information" to information))
-        val userPromptTemplate = PromptTemplate("{query}")
-        val userMessage = userPromptTemplate.createMessage(mapOf("query" to query))
+        val userMessage = PromptTemplate("{query}").createMessage(mapOf("query" to query))
         val prompt = Prompt(listOf(systemMessage, userMessage))
-        return ResponseEntity.ok(ollamaChatModel.call(prompt).result.output.text)
+
+        return ollamaChatModel.call(prompt)
+            .result
+            .output
+            .text
+            .let { ResponseEntity.ok(it) }
     }
 }
