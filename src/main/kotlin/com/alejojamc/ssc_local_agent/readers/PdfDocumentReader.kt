@@ -1,18 +1,18 @@
 package com.alejojamc.ssc_local_agent.readers
 
 import org.springframework.stereotype.Component
-import org.springframework.ai.reader.pdf.ParagraphPdfDocumentReader
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig
 import org.springframework.ai.document.Document
 import org.springframework.ai.reader.ExtractedTextFormatter
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader
 
 @Component
 class PdfDocumentReader {
 
     fun getDocsFromPdfWithCatalog(): List<Document> {
-        val pdfReader = ParagraphPdfDocumentReader(
-            "classpath:ragf/ReturnPolicy.pdf",
-            PdfDocumentReaderConfig.builder()
+        val pdfReader = PagePdfDocumentReader(
+            /* resourceUrl = */ "classpath:ragf/ReturnPolicy.pdf",
+            /* config = */ PdfDocumentReaderConfig.builder()
                 .withPageTopMargin(0)
                 .withPageExtractedTextFormatter(
                     ExtractedTextFormatter.builder()
