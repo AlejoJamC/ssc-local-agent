@@ -62,7 +62,7 @@ class IngestionService(
             """
             You are a helpful assistant.
             Use only the following information to answer the question.
-            Do not use any other information. If you do not know, simply answer: IDK :P.
+            Do not use any other information. If you do not know, simply answer: IDK :(
 
             {information}
             """.trimIndent()

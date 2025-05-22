@@ -5,13 +5,14 @@ import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig
 import org.springframework.ai.document.Document
 import org.springframework.ai.reader.ExtractedTextFormatter
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader
+import org.springframework.ai.reader.pdf.ParagraphPdfDocumentReader
 
 @Component
 class PdfDocumentReader {
 
     fun getDocsFromPdfWithCatalog(): List<Document> {
-        val pdfReader = PagePdfDocumentReader(
-            /* resourceUrl = */ "classpath:ragf/ReturnPolicy.pdf",
+        val pdfReader = ParagraphPdfDocumentReader(
+            /* resourceUrl = */ "classpath:ragf/ReturnPolicyRGFC.pdf",
             /* config = */ PdfDocumentReaderConfig.builder()
                 .withPageTopMargin(0)
                 .withPageExtractedTextFormatter(
